@@ -1,16 +1,33 @@
 import express from "express";
 import QRCode from "qrcode";
+import pool from "../config/database.js";
 
 const router = express.Router();
 
 router.post("/generate", async (req, res) => {
-  const { url } = req.body;
+  const { shortUrl } = req.body;
+  const shortUrlId = shortUrl.split("/").pop();
+
   try {
-    const qrCodeBuffer = await QRCode.toBuffer(`${url}`);
-    res.contentType("image/png");
-    res.send(qrCodeBuffer);
+    const [rows] = await pool.query(
+      "SELECT qr_code FROM url WHERE short_url = ?",
+      [shortUrlId]
+    );
+
+    if (rows.length > 0 && rows[0].qr_code) {
+      res.contentType("image/png");
+      res.send(rows[0].qr_code);
+    } else {
+      const qrCodeBuffer = await QRCode.toBuffer(shortUrl);
+      await pool.query("UPDATE url SET qr_code = ? WHERE short_url = ?", [
+        qrCodeBuffer,
+        shortUrlId,
+      ]);
+      res.contentType("image/png");
+      res.send(qrCodeBuffer);
+    }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({ error: "Server error" });
   }
 });

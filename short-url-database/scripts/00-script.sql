@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS `url` (
   `id` int NOT NULL AUTO_INCREMENT,
   `original_url` text NOT NULL,
   `short_url` varchar(10) NOT NULL,
+  `qr_code` BLOB DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `short_url` (`short_url`)

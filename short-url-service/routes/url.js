@@ -5,13 +5,13 @@ const router = express.Router();
 
 // Generate Short URL
 router.post("/shorten", async (req, res) => {
-  const { url } = req.body;
+  const { originalUrl } = req.body;
   const shortUrl = generateShortUrl();
 
   try {
     const [result] = await pool.query(
       "INSERT INTO url (original_url, short_url) VALUES (?, ?)",
-      [url, shortUrl]
+      [originalUrl, shortUrl]
     );
     res.json({ shortUrl: `${process.env.DOMAIN_NAME}/${shortUrl}` });
   } catch (error) {
