@@ -13,7 +13,9 @@ router.post("/generate", async (req, res) => {
       "SELECT qr_code FROM url WHERE short_url = ?",
       [shortUrlId]
     );
-
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "url not found" });
+    }
     if (rows.length > 0 && rows[0].qr_code) {
       res.contentType("image/png");
       res.send(rows[0].qr_code);

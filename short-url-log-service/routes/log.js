@@ -18,6 +18,16 @@ router.get("/count/:shortUrl", async (req, res) => {
   }
 });
 
+router.get("/history", async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM url");
+    res.status(200).json(rows);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
 router.get("/:shortUrl", async (req, res) => {
   const { shortUrl } = req.params;
   try {
