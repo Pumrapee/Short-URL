@@ -1,0 +1,41 @@
+services:
+  api-gateway:
+    image: nginx:alpine
+    env_file: project-env.sh
+    volumes:
+      - ./api-gateway/default.conf.template:/etc/nginx/conf.d/default.conf.template
+    ports:
+      - "80:80"
+    entrypoint: ["/bin/sh", "-c", "/api-gateway/entrypoint.sh"]
+
+  short-url-service:
+    image: short-url-service
+    env_file: project-env.sh
+    build:
+      context: short-url-service
+    depends_on:
+      - mysql-db
+
+  qr-generate-service:
+    image: qr-generate-service
+    env_file: project-env.sh
+    build:
+      context: qr-generate-service
+
+  log-service:
+    image: log-service
+    env_file: project-env.sh
+    build:
+      context: log-service
+    depends_on:
+      - mysql-db
+
+  mysql-db:
+    image: mysql/mysql-server
+    env_file: project-env.sh
+    volumes:
+      - ./short-url-database/scripts:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+volumes:
+  mysql_data:
