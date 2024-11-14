@@ -4,14 +4,14 @@ import pool from "../config/database.js";
 const router = express.Router();
 
 // Generate Short URL
-router.post("/create", async (req, res) => {
-  const { originalUrl } = req.body;
+router.post("/shorten", async (req, res) => {
+  const { url } = req.body;
   const shortUrl = generateShortUrl();
 
   try {
     const [result] = await pool.query(
-      "INSERT INTO URL (original_url, short_url) VALUES (?, ?)",
-      [originalUrl, shortUrl]
+      "INSERT INTO url (original_url, short_url) VALUES (?, ?)",
+      [url, shortUrl]
     );
     res.json({ shortUrl: `${process.env.DOMAIN_NAME}/${shortUrl}` });
   } catch (error) {
@@ -24,14 +24,14 @@ router.post("/create", async (req, res) => {
 router.get("/:shortUrl", async (req, res) => {
   const { shortUrl } = req.params;
   try {
-    const [rows] = await pool.query("SELECT * FROM URL WHERE short_url = ?", [
+    const [rows] = await pool.query("SELECT * FROM url WHERE short_url = ?", [
       shortUrl,
     ]);
     if (rows.length === 0)
-      return res.status(404).json({ error: "URL not found" });
+      return res.status(404).json({ error: "url not found" });
 
     const originalUrl = rows[0].original_url;
-    await pool.query("INSERT INTO Log (short_url, ip_address) VALUES (?, ?)", [
+    await pool.query("INSERT INTO log (short_url, ip_address) VALUES (?, ?)", [
       rows[0].short_url,
       req.ip,
     ]);

@@ -6,7 +6,7 @@ const router = express.Router();
 router.get("/count/:shortUrl", async (req, res) => {
   const { shortUrl } = req.params;
   try {
-    const [rows] = await pool.query("SELECT count(*) as used FROM LOG WHERE short_url = ?", [
+    const [rows] = await pool.query("SELECT count(*) as used FROM log WHERE short_url = ?", [
       shortUrl,
     ]);
     if (rows.length === 0)
@@ -21,7 +21,7 @@ router.get("/count/:shortUrl", async (req, res) => {
 router.get("/:shortUrl", async (req, res) => {
   const { shortUrl } = req.params;
   try {
-    const [rows] = await pool.query("SELECT * FROM LOG WHERE short_url = ?", [
+    const [rows] = await pool.query("SELECT * FROM log WHERE short_url = ?", [
       shortUrl,
     ]);
     if (rows.length === 0)
