@@ -63,3 +63,71 @@ cd Short-URL
    - `mysql-db`: MySQL database container initialized with any scripts in `short-url-database/scripts`.
 
 ---
+
+## Endpoints
+### **Short URL Service**
+1. **Endpoint:** `POST /shorten`
+   - **Description:** Generates a new Short URL for a given original URL.
+   - **Request Body:**
+     ```json
+     {
+       "originalUrl": "http://example.com"
+     }
+     ```
+   - **Responses:**
+     - **200:** Returns the generated Short URL.
+     - **500:** Database error.
+
+2. **Endpoint:** `GET /:shortUrl`
+   - **Description:** Redirects to the original URL for a given Short URL and logs the access.
+   - **URL Parameters:**
+     - `shortUrl`: The short URL ID.
+   - **Responses:**
+     - **302:** Redirects to the original URL.
+     - **404:** URL not found.
+     - **500:** Database error.
+
+---
+
+### **QR Generate Service**
+- **Endpoint:** `POST /qr/generate`
+  - **Description:** Generates a QR code for the provided Short URL. If a QR code already exists for the URL, it returns the existing one; otherwise, it generates a new one.
+  - **Request Body:**
+    ```json
+    {
+      "shortUrl": "http://example.com/shortUrlId"
+    }
+    ```
+  - **Responses:**
+    - **200:** Returns the QR code as an image.
+    - **404:** URL not found.
+    - **500:** Server error.
+
+---
+
+### **Short URL Log Service**
+1. **Endpoint:** `GET /log/count/:shortUrl`
+   - **Description:** Retrieves the usage count for the given Short URL.
+   - **URL Parameters:**
+     - `shortUrl`: The short URL ID.
+   - **Responses:**
+     - **200:** Returns the usage count.
+     - **404:** Log not found.
+     - **500:** Database error.
+
+2. **Endpoint:** `GET /log/history`
+   - **Description:** Retrieves the complete history of URLs logged.
+   - **Responses:**
+     - **200:** Returns a list of URL logs.
+     - **500:** Database error.
+
+3. **Endpoint:** `GET /log/:shortUrl`
+   - **Description:** Retrieves detailed logs for a specific Short URL.
+   - **URL Parameters:**
+     - `shortUrl`: The short URL ID.
+   - **Responses:**
+     - **200:** Returns the logs for the URL.
+     - **404:** Log not found.
+     - **500:** Database error.
+
+---
