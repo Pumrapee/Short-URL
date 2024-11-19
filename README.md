@@ -50,8 +50,12 @@ cd Short-URL
     }
    }
    ```
+4. In the short-url-front directory edit the VITE_API_URL in `.env.production` to match your domain name.
+   ```bash
+   VITE_API_URL=${DOMAIN_NAME}  # your domain name
+   ```
 
-4. **Note**: For production environments, consider securing sensitive values (e.g., passwords) with Docker secrets.
+5. **Note**: For production environments, consider securing sensitive values (e.g., passwords) with Docker secrets.
 
 ### Step 3: Build and Start the Docker Containers
 
@@ -110,28 +114,42 @@ cd Short-URL
 ---
 
 ### **Short URL Log Service**
-1. **Endpoint:** `GET /log/count/:shortUrl`
-   - **Description:** Retrieves the usage count for the given Short URL.
-   - **URL Parameters:**
-     - `shortUrl`: The short URL ID.
-   - **Responses:**
-     - **200:** Returns the usage count.
-     - **404:** Log not found.
-     - **500:** Database error.
 
-2. **Endpoint:** `GET /log/history`
-   - **Description:** Retrieves the complete history of URLs logged.
-   - **Responses:**
-     - **200:** Returns a list of URL logs.
-     - **500:** Database error.
+1. **Endpoint:** `GET /log/totalClicked`  
+   - **Description:** Retrieves the total count of all clicks on all Short URLs.  
+   - **Responses:**  
+     - **200:** Returns the total clicked count.  
+     - **404:** Log not found.  
+     - **500:** Database error.  
 
-3. **Endpoint:** `GET /log/:shortUrl`
-   - **Description:** Retrieves detailed logs for a specific Short URL.
-   - **URL Parameters:**
-     - `shortUrl`: The short URL ID.
-   - **Responses:**
-     - **200:** Returns the logs for the URL.
-     - **404:** Log not found.
-     - **500:** Database error.
+2. **Endpoint:** `GET /log/totalClicked/:shortUrl`  
+   - **Description:** Retrieves the total click count for a specific Short URL.  
+   - **URL Parameters:**  
+     - `shortUrl`: The Short URL ID to retrieve click data for.  
+   - **Responses:**  
+     - **200:** Returns the total clicked count for the specific Short URL.  
+     - **404:** Log not found.  
+     - **500:** Database error.  
+
+3. **Endpoint:** `GET /log/url`  
+   - **Description:** Retrieves the complete list of all Short URLs.  
+   - **Responses:**  
+     - **200:** Returns a list of URLs.  
+     - **500:** Database error.  
+
+4. **Endpoint:** `GET /log/totalUrl`  
+   - **Description:** Retrieves the total count of all stored Short URLs.  
+   - **Responses:**  
+     - **200:** Returns the total URL count.  
+     - **500:** Database error.  
+
+5. **Endpoint:** `GET /log/:shortUrl`  
+   - **Description:** Retrieves all logs for a specific Short URL, including details like timestamps and user interactions.  
+   - **URL Parameters:**  
+     - `shortUrl`: The Short URL ID to retrieve logs for.  
+   - **Responses:**  
+     - **200:** Returns the logs for the specified Short URL.  
+     - **404:** Log not found.  
+     - **500:** Database error.  
 
 ---
