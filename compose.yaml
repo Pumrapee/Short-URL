@@ -7,6 +7,11 @@ services:
       - "80:80"
     restart: unless-stopped
 
+  short-url-fe:
+    image: short-url-fe
+    build: 
+      context: short-url-front
+
   short-url-service:
     image: short-url-service
     env_file: project-env.sh
@@ -20,6 +25,8 @@ services:
     env_file: project-env.sh
     build:
       context: qr-generate-service
+    depends_on:
+      - mysql-db
 
   short-url-log-service:
     image: short-url-log-service

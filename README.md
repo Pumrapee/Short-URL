@@ -29,21 +29,25 @@ cd Short-URL
    server_name domain_name;  # Your domain name
 
    location / {
-       proxy_pass http://short-url-service:3000/url/;
-   }
+        proxy_pass http://short-url-fe/;
+    }
 
-   location /qr/ {
-       proxy_pass http://qr-generate-service:3001/qr/;
-   }
+    location /url/ {
+        proxy_pass http://short-url-service:3000/url/;
+    }
 
-   location /log/ {
-       proxy_pass http://short-url-log-service:3002/log/;
-   }
+    location /qr/ {
+        proxy_pass http://qr-generate-service:3001/qr/;
+    }
 
-   error_page   500 502 503 504  /50x.html;
-   location = /50x.html {
-       root   /usr/share/nginx/html;
-   }
+    location /log/ {
+        proxy_pass http://short-url-log-service:3002/log/;
+    }
+
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
    }
    ```
 
