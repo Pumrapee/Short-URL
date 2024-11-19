@@ -32,7 +32,8 @@ const getTotalClicked = async () => {
       `http://${import.meta.env.VITE_API_URL}/log/totalClicked`
     );
     if (response.ok) {
-      totalClicked.value = await response.json().totalClicked;
+      const data = await response.json();
+      totalClicked.value = data.totalClicked;
     } else {
       console.error("Error:", await response.text());
     }
@@ -47,7 +48,9 @@ const getTotalUrl = async () => {
       `http://${import.meta.env.VITE_API_URL}/log/totalUrl`
     );
     if (response.ok) {
-        totalUrl.value = await response.json().totalUrl;
+      const data = await response.json();
+      totalUrl.value = data.totalUrl;
+    
     } else {
       console.error("Error:", await response.text());
     }

@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get("/totalClicked", async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT count(*) as totalClicked");
+    const [rows] = await pool.query("SELECT count(*) as totalClicked FROM log");
     if (rows.length === 0)
       return res.status(404).json({ error: "Log not found" });
     res.status(200).json(rows[0]);
@@ -43,7 +43,7 @@ router.get("/url", async (req, res) => {
 router.get("/totalUrl", async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT count(*) as totalUrl FROM url");
-    res.status(200).json(rows);
+    res.status(200).json(rows[0]);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Database error" });

@@ -13,7 +13,7 @@ router.post("/shorten", async (req, res) => {
       "INSERT INTO url (original_url, short_url) VALUES (?, ?)",
       [originalUrl, shortUrl]
     );
-    res.json({ shortUrl: `http://${process.env.DOMAIN_NAME}/${shortUrl}` });
+    res.json({ shortUrl: `http://${process.env.DOMAIN_NAME}/url/${shortUrl}` });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Database error" });
